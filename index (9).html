@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>제관 협력업체 불량 개선 대시보드</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#14213d;--mute:#5c6b86;--line:#dde3ee;--navy:#0b2a5b;--gold:#c8962e;--ok:#1f9d55;--warn:#d97706;--bad:#d64545;--hdr:#0b2a5b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1424;--card:#16203a;--ink:#e8edf7;--mute:#9aa8c4;--line:#27345a;--navy:#6f9cf0;--hdr:#091022}}
+:root[data-theme="dark"]{--bg:#0d1424;--card:#16203a;--ink:#e8edf7;--mute:#9aa8c4;--line:#27345a;--navy:#6f9cf0;--hdr:#091022}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;line-height:1.55}
+header{position:sticky;top:0;z-index:20;background:var(--hdr);color:#fff;padding:0 16px;padding-top:env(safe-area-inset-top,0px)}
+header .in{max-width:1180px;margin:auto;display:flex;align-items:center;gap:20px;height:56px;overflow-x:auto;white-space:nowrap}
+header b{letter-spacing:.06em;font-size:14px;color:#f3d48a}
+header a{color:#d5deef;text-decoration:none;font-size:14px}header a:hover{color:#fff}
+main{max-width:1180px;margin:auto;padding:0 16px 48px}
+.hero{padding:44px 0 24px}
+.tag{display:inline-block;font-size:12px;color:var(--gold);border:1px solid var(--gold);border-radius:99px;padding:2px 10px;margin-bottom:12px}
+h1{font-size:clamp(24px,4vw,38px);margin:0 0 10px;line-height:1.25}
+.hero p{color:var(--mute);max-width:720px;margin:0 0 18px}
+.btn{display:inline-block;background:var(--navy);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;font-size:14px;cursor:pointer;text-decoration:none}
+:root[data-theme="dark"] .btn{color:#0d1424}@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#0d1424}}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:6px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi small{color:var(--mute);font-size:12px;display:block}.kpi strong{font-size:28px}
+.kpi.g strong{color:var(--gold)}
+section{margin-top:40px}
+section h2{font-size:22px;margin:0 0 4px}section .sub{color:var(--mute);margin:0 0 16px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--gold)}
+.row{display:grid;grid-template-columns:110px 1fr 54px;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.row span:last-child{text-align:right;color:var(--mute)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+select,input,textarea{font:inherit;font-size:14px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:100%}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:860px;font-size:13px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mute);font-weight:600;white-space:nowrap}
+.chip{display:inline-block;border-radius:99px;padding:1px 9px;font-size:12px;color:#fff;white-space:nowrap}
+.s0{background:#8a94a8}.s1{background:var(--warn)}.s2{background:#3b82c4}.s3{background:#7c5cc4}.s4{background:var(--ok)}
+.late{color:var(--bad);font-weight:600}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px}
+.v{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.v:hover{border-color:var(--gold)}.v b{font-size:13px}.v small{display:block;color:var(--mute);font-size:12px;margin:2px 0 6px}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+form label{font-size:12px;color:var(--mute);display:flex;flex-direction:column;gap:4px}form .w{grid-column:1/-1}
+textarea{min-height:64px;resize:vertical}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.steps .card b{color:var(--gold)}.steps p{margin:6px 0 0;font-size:13px;color:var(--mute)}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:20px}
+#note{font-size:12px;color:var(--mute);margin-top:8px}
+</style>
+</head>
+<body>
+<header><div class="in"><b>DEFECT IMPROVEMENT</b><a href="#home">Overview</a><a href="#cases">Defects</a><a href="#vendors">Vendors</a><a href="#progress">Progress</a><a href="#guide">Guideline</a></div></header>
+<main>
+<div class="hero" id="home">
+<span class="tag">건기부품품질팀 · 제관품질파트 · 협력업체 30개사</span>
+<h1>협력업체 불량 개선을 한 화면에서 관리합니다.</h1>
+<p>업체별 발생 불량의 원인 파악 → 개선대책 마련 → 개선안 적용 → 효과 확인까지 진행 상황을 함께 보고 기록합니다.</p>
+<a class="btn" href="#form">불량 등록</a> <a class="btn ghost" href="#cases">불량 목록 보기</a>
+<div class="kpis" id="kpis"></div>
+</div>
+
+<section id="progress"><h2>진행률 대시보드</h2><p class="sub">접수 0% · 원인파악 25% · 대책수립 50% · 적용완료 75% · 효과확인 100%로 환산합니다.</p>
+<div class="card"><div class="row" style="grid-template-columns:110px 1fr 54px"><b>전체 진행률</b><div class="bar"><i id="ob" style="width:0"></i></div><span id="op">0%</span></div><div id="stg"></div></div></section>
+
+<section id="cases"><h2>불량 현황</h2><p class="sub">단계는 목록에서 바로 바꿀 수 있습니다. 행의 “수정”을 누르면 내용을 고칠 수 있습니다.</p>
+<div class="card"><div class="filters"><select id="fv"></select><select id="fs"></select><input id="fq" placeholder="품명·불량내용 검색"></div>
+<div class="tw"><table><thead><tr><th>업체</th><th>발생일</th><th>품명 / 불량내용</th><th>원인</th><th>개선대책</th><th>적용 확인</th><th>기한</th><th>단계</th><th></th></tr></thead><tbody id="tb"></tbody></table></div><div id="note"></div></div></section>
+
+<section id="form"><h2>불량 등록 / 수정</h2><p class="sub">저장하면 같은 페이지를 보는 사람들에게 바로 반영됩니다.</p>
+<div class="card"><form id="f">
+<label>업체<select id="a_v" required></select></label>
+<label>발생일<input id="a_d" type="date" required></label>
+<label>품명<input id="a_p" placeholder="예) 붐 브라켓" required></label>
+<label>조치 기한<input id="a_due" type="date"></label>
+<label class="w">불량 내용<textarea id="a_t" required></textarea></label>
+<label class="w">원인 분석 (업체 기재)<textarea id="a_c"></textarea></label>
+<label class="w">개선대책<textarea id="a_m"></textarea></label>
+<label class="w">적용 확인 내용 (적용일·확인 방법·결과)<textarea id="a_e"></textarea></label>
+<label>단계<select id="a_s"></select></label>
+<label>작성자<input id="a_w" placeholder="소속 / 이름"></label>
+<div class="w"><button class="btn" type="submit" id="sv">저장</button> <button class="btn ghost" type="button" id="rs">새로 입력</button></div>
+</form></div></section>
+
+<section id="vendors"><h2>업체별 현황</h2><p class="sub">업체를 누르면 해당 업체 불량만 필터링됩니다.</p><div class="vgrid" id="vg"></div></section>
+
+<section id="guide"><h2>운영 기준</h2><p class="sub">30개 업체가 같은 기준으로 기록하도록 아래 원칙을 따릅니다.</p>
+<div class="steps">
+<div class="card"><b>1 · 접수</b><p>품질파트가 불량 발생일·품명·불량 내용을 등록합니다.</p></div>
+<div class="card"><b>2 · 원인 파악</b><p>업체가 발생 원인과 유출 원인을 기재합니다.</p></div>
+<div class="card"><b>3 · 대책 수립</b><p>재발 방지 대책과 담당자·기한을 확정합니다.</p></div>
+<div class="card"><b>4 · 적용</b><p>대책을 현장에 적용하고 적용일과 증빙을 남깁니다.</p></div>
+<div class="card"><b>5 · 효과 확인</b><p>품질파트가 적용 상태와 재발 여부를 확인하고 종결합니다.</p></div>
+</div></section>
+</main>
+<footer>제관 협력업체 불량 개선 대시보드 · 건기부품품질팀 제관품질파트</footer>
+
+<script>
+// ===== 설정 =====
+// Google Apps Script 웹앱 URL (README 참고). 비워두면 이 브라우저에만 저장되는 체험 모드로 동작합니다.
+const API_URL="";
+// 업체명은 여기서 수정하세요 (30개사)
+const VENDORS=Array.from({length:30},(_,i)=>"협력업체 "+String(i+1).padStart(2,"0"));
+const STAGES=["접수","원인파악","대책수립","적용완료","효과확인"];
+let cases=[],coll=null,editId=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const pct=c=>(Number(c.stage)||0)*25;
+
+function opts(el,list,first){el.innerHTML=(first?'<option value="">'+first+'</option>':"")+list.map((t,i)=>'<option value="'+(first?(typeof t==="string"&&list===VENDORS?t:i):(list===VENDORS?t:i))+'">'+esc(t)+'</option>').join("")}
+opts($("fv"),VENDORS,"전체 업체");opts($("fs"),STAGES,"전체 단계");opts($("a_v"),VENDORS);opts($("a_s"),STAGES);
+$("fs").innerHTML='<option value="">전체 단계</option>'+STAGES.map((t,i)=>'<option value="'+i+'">'+t+'</option>').join("");
+$("a_s").innerHTML=STAGES.map((t,i)=>'<option value="'+i+'">'+t+'</option>').join("");
+$("a_d").value=today();
+
+function render(){
+  const n=cases.length,done=cases.filter(c=>+c.stage===4).length,late=cases.filter(c=>c.due&&c.due<today()&&+c.stage<4).length;
+  const avg=n?Math.round(cases.reduce((a,c)=>a+pct(c),0)/n):0;
+  $("kpis").innerHTML=[["전체 불량 건수",n,""],["진행 중",n-done,""],["효과 확인 완료",done,""],["기한 초과",late,""],["전체 진행률",avg+"%","g"]]
+    .map(k=>'<div class="kpi '+k[2]+'"><small>'+k[0]+'</small><strong>'+k[1]+'</strong></div>').join("");
+  $("ob").style.width=avg+"%";$("op").textContent=avg+"%";
+  $("stg").innerHTML=STAGES.map((s,i)=>{const k=cases.filter(c=>+c.stage===i).length,p=n?Math.round(k/n*100):0;
+    return '<div class="row"><span>'+s+'</span><div class="bar"><i style="width:'+p+'%"></i></div><span>'+k+'건</span></div>'}).join("");
+  const fv=$("fv").value,fs=$("fs").value,q=$("fq").value.trim().toLowerCase();
+  const list=cases.filter(c=>(!fv||c.vendor===fv)&&(fs===""||String(c.stage)===fs)&&(!q||((c.part||"")+(c.text||"")).toLowerCase().includes(q)))
+    .sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  $("tb").innerHTML=list.length?list.map(c=>{const od=c.due&&c.due<today()&&+c.stage<4;
+    return '<tr><td>'+esc(c.vendor)+'</td><td>'+esc(c.date)+'</td><td><b>'+esc(c.part)+'</b><br>'+esc(c.text)+'</td><td>'+esc(c.cause)+'</td><td>'+esc(c.measure)+'</td><td>'+esc(c.evidence)+'</td><td class="'+(od?"late":"")+'">'+esc(c.due||"-")+'</td><td><select data-s="'+c.id+'">'+STAGES.map((s,i)=>'<option value="'+i+'"'+(+c.stage===i?" selected":"")+'>'+s+'</option>').join("")+'</select></td><td><a href="#form" data-e="'+c.id+'">수정</a> · <a href="#cases" data-d="'+c.id+'">삭제</a></td></tr>'}).join("")
+    :'<tr><td colspan="9" style="color:var(--mute);padding:24px">등록된 불량이 없습니다. 아래에서 첫 불량을 등록하세요.</td></tr>';
+  $("vg").innerHTML=VENDORS.map(v=>{const cs=cases.filter(c=>c.vendor===v),p=cs.length?Math.round(cs.reduce((a,c)=>a+pct(c),0)/cs.length):0;
+    return '<div class="v" data-v="'+esc(v)+'"><b>'+esc(v)+'</b><small>불량 '+cs.length+'건 · 완료 '+cs.filter(c=>+c.stage===4).length+'건</small><div class="bar"><i style="width:'+p+'%"></i></div></div>'}).join("");
+}
+
+let code=""; try{code=localStorage.getItem("acode")||""}catch(e){}
+const store=()=>{try{localStorage.setItem("cases",JSON.stringify(cases))}catch(e){}};
+async function post(body){
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...body,code})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||"오류");return j;
+}
+async function load(){
+  if(!API_URL){try{cases=JSON.parse(localStorage.getItem("cases")||"[]")}catch(e){}render();return}
+  try{
+    const r=await fetch(API_URL+"?action=list&code="+encodeURIComponent(code));const j=await r.json();
+    if(!j.ok){if(j.error==="code"){const c=prompt("접근 코드를 입력하세요");if(c){code=c;try{localStorage.setItem("acode",c)}catch(e){}return load()}}throw new Error(j.error)}
+    cases=j.cases;$("note").textContent="공유 시트와 연결됨 · 마지막 갱신 "+new Date().toLocaleTimeString("ko-KR");render();
+  }catch(e){$("note").textContent="공유 데이터를 불러오지 못했습니다. (접근 코드·웹앱 URL 확인)"}
+}
+async function save(c){
+  const i=cases.findIndex(x=>x.id===c.id);if(i>=0)cases[i]=c;else cases.push(c);render();
+  if(!API_URL){store();return}
+  try{await post({action:"save",item:c});await load()}catch(e){$("note").textContent="저장 실패: "+e.message}
+}
+async function remove(id){
+  cases=cases.filter(c=>c.id!==id);render();
+  if(!API_URL){store();return}
+  try{await post({action:"delete",id});await load()}catch(e){$("note").textContent="삭제 실패: "+e.message}
+}
+function reset(){editId=null;$("f").reset();$("a_d").value=today();$("sv").textContent="저장"}
+
+$("f").addEventListener("submit",e=>{e.preventDefault();
+  save({id:editId||"c"+Date.now(),vendor:$("a_v").value,date:$("a_d").value,part:$("a_p").value,due:$("a_due").value,text:$("a_t").value,cause:$("a_c").value,measure:$("a_m").value,evidence:$("a_e").value,stage:+$("a_s").value,writer:$("a_w").value,updated:today()});
+  reset()});
+$("rs").onclick=reset;
+["fv","fs"].forEach(i=>$(i).onchange=render);$("fq").oninput=render;
+document.addEventListener("click",e=>{
+  const t=e.target,v=t.closest("[data-v]");
+  if(v){$("fv").value=v.dataset.v;render();$("cases").scrollIntoView();return}
+  if(t.dataset.e){const c=cases.find(x=>x.id===t.dataset.e);if(!c)return;editId=c.id;
+    $("a_v").value=c.vendor;$("a_d").value=c.date||"";$("a_p").value=c.part||"";$("a_due").value=c.due||"";$("a_t").value=c.text||"";$("a_c").value=c.cause||"";$("a_m").value=c.measure||"";$("a_e").value=c.evidence||"";$("a_s").value=c.stage;$("a_w").value=c.writer||"";$("sv").textContent="수정 저장"}
+  if(t.dataset.d&&confirm("이 불량 기록을 삭제할까요?")){e.preventDefault();remove(t.dataset.d)}
+});
+document.addEventListener("change",e=>{const id=e.target.dataset&&e.target.dataset.s;if(!id)return;
+  const c=cases.find(x=>x.id===id);if(c)save({...c,stage:+e.target.value,updated:today()})});
+
+load();
+if(API_URL)setInterval(()=>{if(!document.hidden)load()},60000);
+if(!API_URL)$("note").textContent="체험 모드: 공유 시트(API_URL) 미설정 상태라 이 브라우저에만 저장됩니다.";
+</script>
+</body>
+</html>
